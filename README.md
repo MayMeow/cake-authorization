@@ -101,3 +101,7 @@ If you're using role based authorization, all roles for which you want to have a
 
 Work in progress. Entity which need to be authorized must implement
 `\MayMeow\Authorization\Controller\Component\ResourceAuthorizationInterface`, it must return identifier of author.
+
+## Contribute
+
+For contibuting guide please check https://github.com/MayMeow/contribution
