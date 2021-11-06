@@ -10,7 +10,7 @@ use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
-use MayMeow\Authorization\Middleware\Authorize;
+use MayMeow\Authorization\Attributes\Authorize;
 
 /**
  * Authorization component
