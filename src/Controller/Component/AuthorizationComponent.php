@@ -47,13 +47,11 @@ class AuthorizationComponent extends Component
                 throw new UnauthorizedException('Please login');
             }
 
-            // If authorization is Role based check for roles
-            if ($authorization->isRoleBased()) {
-                /** @var RoleAuthorizationInterface $authenticatedUser */
-                $authenticatedUser = $this->_getAuthenticatedUser($identity);
-                if ($authorization->contains($authenticatedUser->getRoleName()) == false) {
-                    throw new UnauthorizedException("You are not allowed to preform $method action");
-                }
+            /** @var AuthorizationInterface $authenticatedUser */
+            $authenticatedUser = $this->_getAuthenticatedUser($identity);
+
+            if ($authorization->isAuthorized($authenticatedUser) == false) {
+                throw new UnauthorizedException("You are not allowed to preform $method action");
             }
         }
     }

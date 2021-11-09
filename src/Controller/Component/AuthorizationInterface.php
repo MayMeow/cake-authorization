@@ -2,11 +2,7 @@
 
 namespace MayMeow\Authorization\Controller\Component;
 
-/**
- * @deprecated
- * @see AuthorizationInterface
- */
-interface RoleAuthorizationInterface
+interface AuthorizationInterface
 {
     /**
      * Return string representation of role
@@ -14,4 +10,6 @@ interface RoleAuthorizationInterface
      * @return string
      */
     public function getRoleName() : string;
+
+    public function getUserName(): string;
 }
