@@ -1,5 +1,5 @@
 {
-    "name": "maymeow/cake-authorization",
+    "name": "maymeow/cakephp-authorization",
     "description": "MayMeow/Authorization plugin for CakePHP",
     "type": "cakephp-plugin",
     "license": "MIT",
