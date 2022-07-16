@@ -3,6 +3,8 @@
 namespace MayMeow\Authorization\Middleware;
 
 use MayMeow\Authorization\Controller\Component\AuthorizationInterface;
+use MayMeow\Authorization\Identity;
+use MayMeow\Authorization\IdentityDecorator;
 use MayMeow\Authorization\Services\AuthorizationServiceInterface;
 use MayMeow\Authorization\Services\AuthorizationServiceProviderInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -32,8 +34,9 @@ class AuthorizationMiddleware implements MiddlewareInterface
         /** @var AuthorizationInterface $identity */
         $identity = $request->getAttribute('identity');
 
+
         if ($identity != null) {
-            $request = $request->withAttribute('identity.service', $this->authorizationService);
+            $request = $request->withAttribute('identity', new Identity($this->authorizationService, $identity));
         }
 
         $response = $handler->handle($request);
