@@ -14,20 +14,23 @@ class Authorize
      */
     protected ?string $role;
 
-    protected ?string $user;
+    /**
+     * @var string|null
+     */
+    protected ?string $policy;
 
     /**
      * @param string|null $role
-     * @param string|null $user
+     * @param string|null $policy
      */
-    public function __construct(?string $role = null, ?string $user = null)
+    public function __construct(?string $role = null, ?string $policy = null)
     {
         if ($role != null) {
             $this->role = $role;
         }
 
-        if ($user != null) {
-            $this->user = $user;
+        if ($policy != null) {
+            $this->policy = $policy;
         }
     }
 
@@ -47,10 +50,10 @@ class Authorize
 
     /**
      * Returns true if user is set
-     *
+     * @TODO: finish this method
      * @return bool
      */
-    public function isUserBased(): bool
+    public function isPolicyBased(): bool
     {
         if (!$this->isRoleBased() && isset($this->user)) {
             return true;
@@ -90,10 +93,11 @@ class Authorize
 
     /**
      * Check if name is in allowed usernames
-     * @param string $bane
+     * @TODO add policy check
+     * @param string $name
      * @return bool
      */
-    public function hasUser(string $name): bool
+    public function hasPolicy(string $name): bool
     {
         if (!isset($this->user)) {
             return false;
@@ -118,9 +122,11 @@ class Authorize
      */
     public function isAuthorized(AuthorizationInterface $user): bool
     {
-        if ($this->hasRole($user->getRoleName()) || $this->hasUser($user->getUserName())) {
+        if ($this->hasRole($user->getRoleName())) {
             return true;
         }
+
+        // TODO add check against policy
 
         return false;
     }
