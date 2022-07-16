@@ -32,8 +32,9 @@ class AuthorizationMiddleware implements MiddlewareInterface
         /** @var AuthorizationInterface $identity */
         $identity = $request->getAttribute('identity');
 
-        $policies = $this->authorizationService->getPolicies();
-        $request = $request->withAttribute('MayMeow/authorization/V1.policies', $policies);
+        if ($identity != null) {
+            $request = $request->withAttribute('identity.service', $this->authorizationService);
+        }
 
         $response = $handler->handle($request);
         return $response;

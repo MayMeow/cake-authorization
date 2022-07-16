@@ -2,24 +2,30 @@
 
 namespace MayMeow\Authorization\Services;
 
+use MayMeow\Authorization\Policies\Requirements\PolicyRequirementInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 class AuthorizationService implements AuthorizationServiceInterface
 {
+    /**
+     * @var array<string,PolicyRequirementInterface>
+     */
     protected array $policies = [];
+
+    protected ServerRequestInterface $request;
 
     /**
      * @param string $policy
-     * @param string $role
      * @return $this
      */
-    public function addPolicy(string $policy, string $role): AuthorizationService
+    public function addPolicy(string $policy, PolicyRequirementInterface $policyRequirement): AuthorizationService
     {
-        $this->policies[$policy] = $role;
-
+        $this->policies[$policy] = $policyRequirement;
         return $this;
     }
 
     /**
-     * @return array
+     * @return array<string, PolicyRequirementInterface>
      */
     public function getPolicies(): array
     {
