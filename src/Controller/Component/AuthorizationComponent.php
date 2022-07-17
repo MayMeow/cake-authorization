@@ -11,6 +11,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
 use MayMeow\Authorization\Attributes\Authorize;
+use MayMeow\Authorization\Services\AuthorizationService;
 
 /**
  * Authorization component
@@ -41,6 +42,7 @@ class AuthorizationComponent extends Component
         if (!empty($attributes)) {
             /** @var Authorize $authorization */
             $authorization = $attributes[0]->newInstance();
+            $authorizationService = new AuthorizationService($authorization);
 
             // check if there is logged-in user
             if (empty($identity)) {
@@ -50,7 +52,7 @@ class AuthorizationComponent extends Component
             /** @var AuthorizationInterface $authenticatedUser */
             $authenticatedUser = $this->_getAuthenticatedUser($identity);
 
-            if (!$authorization->isAuthorized($authenticatedUser)) {
+            if (!$authorizationService->handle($authenticatedUser)) {
                 throw new UnauthorizedException("You are not allowed to preform $method action");
             }
         }
