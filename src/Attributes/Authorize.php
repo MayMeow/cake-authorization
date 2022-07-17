@@ -18,17 +18,13 @@ class Authorize
 
     /**
      * @param string|null $role
-     * @param string|null $user
      */
-    public function __construct(?string $role = null, ?string $user = null)
+    public function __construct(?string $role = null)
     {
         if ($role != null) {
             $this->role = $role;
         }
 
-        if ($user != null) {
-            $this->user = $user;
-        }
     }
 
     /**
@@ -89,36 +85,12 @@ class Authorize
     }
 
     /**
-     * Check if name is in allowed usernames
-     * @param string $bane
-     * @return bool
-     */
-    public function hasUser(string $name): bool
-    {
-        if (!isset($this->user)) {
-            return false;
-        }
-
-        if (strpos($this->user, ',')) {
-            $users = explode(',', $this->user);
-
-            if (in_array($name, $users)) {
-                return true;
-            }
-        } else if ($this->user == $name) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param AuthorizationInterface $user
      * @return bool
      */
     public function isAuthorized(AuthorizationInterface $user): bool
     {
-        if ($this->hasRole($user->getRoleName()) || $this->hasUser($user->getUserName())) {
+        if ($this->hasRole($user->getRoleName())) {
             return true;
         }
 

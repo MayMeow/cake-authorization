@@ -97,48 +97,6 @@ public function view($id = null)
 
 If you're using role based authorization, all roles for which you want to have access to the actions must be provided.
 
-## UserName based authorization
-
-You can also authorize access to certain methods only for some users as in example bellow (username in example is
-his email)
-
-```php
-#[Authorize(user: 'user@email.tld')]
-#[Route('/users/edit/*')]
-public function edit($id = null)
-{
-    $user = $this->Users->get($id, [
-        'contain' => [],
-    ]);
-}
-```
-
-As in groups you can also add more usernames separated by `,` coma.
-
-:warning: It is important to enable email verification if you are using this method. And if you are using usernames add those
-to the list of prohibited names so no one can use those names during registration process.
-
-### Combination of Role based and User based authorization
-
-In some situation you want to authorize users based on roles and some users on their names.
-
-```php
-#[Authorize(role: 'Administrators,Finance', user: 'superadmin@mail.tld')]
-#[Route('/users/add')]
-public function add()
-{
-    $user = $this->Users->newEmptyEntity();
-}
-```
-
-In this case if users hasRole that are in allowed roles or has email from list of allowed emails then
-authorization is passed and that user is allowed to preform requested action.
-
-## Resource based authorization
-
-Work in progress. Entity which need to be authorized must implement
-`\MayMeow\Authorization\Controller\Component\ResourceAuthorizationInterface`, it must return identifier of author.
-
 ## Contribute
 
 For contibuting guide please check https://github.com/MayMeow/contribution
