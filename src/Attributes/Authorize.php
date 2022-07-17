@@ -3,6 +3,7 @@
 namespace MayMeow\Authorization\Attributes;
 
 use MayMeow\Authorization\Controller\Component\AuthorizationInterface;
+use MayMeow\Authorization\Policies\AuthorizationPolicy;
 use function PHPUnit\Framework\isNan;
 use function PHPUnit\Framework\isNull;
 
@@ -16,15 +17,32 @@ class Authorize
 
     protected ?string $user;
 
+    protected ?AuthorizationPolicy $policy;
+
+    protected ?string $options;
+
     /**
      * @param string|null $role
+     * @param string|null $policy
+     * @param AuthorizationPolicy|null $policy
+     * @param string|null $options
      */
-    public function __construct(?string $role = null)
+    public function __construct(
+        ?string $role = null,
+        ?AuthorizationPolicy $policy = null,
+        ?string $options = null)
     {
         if ($role != null) {
             $this->role = $role;
         }
 
+        if ($policy != null) {
+            $this->policy = $policy;
+        }
+
+        if ($options != null) {
+            $this->options = $options;
+        }
     }
 
     /**
