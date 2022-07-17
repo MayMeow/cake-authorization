@@ -2,6 +2,7 @@
 
 namespace MayMeow\Authorization\Policies\Requirements\Handlers;
 
+use Cake\Datasource\EntityInterface;
 use MayMeow\Authorization\Policies\Requirements\PolicyRequirementInterface;
 
 /**
@@ -11,5 +12,5 @@ use MayMeow\Authorization\Policies\Requirements\PolicyRequirementInterface;
  */
 interface AuthorizationHandlerInterface
 {
-    public function handleRequirement(string $context, PolicyRequirementInterface $requirement): bool;
+    public function handleRequirement(EntityInterface $context, PolicyRequirementInterface $requirement): bool;
 }

@@ -11,6 +11,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
 use MayMeow\Authorization\Attributes\Authorize;
+use MayMeow\Authorization\IdentityInterface;
 
 /**
  * Authorization component
@@ -30,9 +31,10 @@ class AuthorizationComponent extends Component
      * @param Controller $controller
      * @throws \ReflectionException
      */
-    public function authorize(Controller $controller)
+    public function authorize(Controller $controller): void
     {
         $method = $controller->getRequest()->getParam('action');
+        /** @var \MayMeow\Authorization\Identity $identity */
         $identity = $controller->getRequest()->getAttribute('identity');
 
         $reflectionClass = new \ReflectionClass($controller);
@@ -47,19 +49,9 @@ class AuthorizationComponent extends Component
                 throw new UnauthorizedException('Please login');
             }
 
-            /** @var AuthorizationInterface $authenticatedUser */
-            $authenticatedUser = $this->_getAuthenticatedUser($identity);
-
-            if ($authorization->isAuthorized($authenticatedUser) == false) {
+            if (!$identity->getAuthorization()->handle($identity, $authorization)) {
                 throw new UnauthorizedException("You are not allowed to preform $method action");
             }
         }
-    }
-
-    protected function _getAuthenticatedUser(Identity $identity) : EntityInterface
-    {
-        $usersTable = TableRegistry::getTableLocator()->get($this->getConfig('identity_model'));
-
-        return $usersTable->get($identity->getIdentifier());
     }
 }

@@ -2,20 +2,47 @@
 
 namespace MayMeow\Authorization;
 
-use Authentication\IdentityInterface;
-use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
-use JetBrains\PhpStorm\Internal\TentativeType;
+use Authentication\IdentityInterface as AuthenticationIdentityInterface;
+use MayMeow\Authorization\Services\AuthorizationServiceInterface;
 
-class Identity extends IdentityDecorator implements IdentityInterface
+class Identity extends IdentityDecorator implements AuthenticationIdentityInterface
 {
+    /**
+     * @var AuthenticationIdentityInterface $identity
+     */
+    protected $identity;
 
-    public function getIdentifier()
+    /**
+     * @param AuthorizationServiceInterface $service
+     * @param AuthenticationIdentityInterface $identity
+     */
+    public function __construct(AuthorizationServiceInterface $service, AuthenticationIdentityInterface $identity)
     {
-        // TODO: Implement getIdentifier() method.
+        $this->authorization = $service;
+        $this->identity = $identity;
     }
 
-    public function getOriginalData()
+    /**
+     * @return int|string|null
+     */
+    public function getIdentifier(): int|string|null
     {
-        // TODO: Implement getOriginalData() method.
+        return $this->identity->getIdentifier();
+    }
+
+    /**
+     * @return array|\ArrayAccess<IdentityInterface>
+     */
+    public function getOriginalData(): array|\ArrayAccess
+    {
+        return $this->identity->getOriginalData();
+    }
+
+    /**
+     * @return AuthorizationServiceInterface
+     */
+    public function getAuthorization(): AuthorizationServiceInterface
+    {
+        return $this->authorization;
     }
 }

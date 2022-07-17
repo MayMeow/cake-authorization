@@ -3,6 +3,9 @@
 namespace MayMeow\Authorization\Attributes;
 
 use MayMeow\Authorization\Controller\Component\AuthorizationInterface;
+use MayMeow\Authorization\Identity;
+use MayMeow\Authorization\IdentityInterface;
+use MayMeow\Authorization\Policies\Requirements\Handlers\AuthorizationHandlerInterface;
 use function PHPUnit\Framework\isNan;
 use function PHPUnit\Framework\isNull;
 
@@ -55,7 +58,7 @@ class Authorize
      */
     public function isPolicyBased(): bool
     {
-        if (!$this->isRoleBased() && isset($this->user)) {
+        if (isset($this->policy)) {
             return true;
         }
 
@@ -92,31 +95,6 @@ class Authorize
     }
 
     /**
-     * Check if name is in allowed usernames
-     * @TODO add policy check
-     * @param string $name
-     * @return bool
-     */
-    public function hasPolicy(string $name): bool
-    {
-        if (!isset($this->user)) {
-            return false;
-        }
-
-        if (strpos($this->user, ',')) {
-            $users = explode(',', $this->user);
-
-            if (in_array($name, $users)) {
-                return true;
-            }
-        } else if ($this->user == $name) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param AuthorizationInterface $user
      * @return bool
      */
@@ -126,8 +104,21 @@ class Authorize
             return true;
         }
 
-        // TODO add check against policy
-
         return false;
+    }
+
+    /**
+     * @param IdentityInterface|Identity $identity
+     * @return bool
+     */
+    public function can(IdentityInterface|Identity $identity, AuthorizationInterface $user): bool
+    {
+        $policy = $identity->getAuthorization()->getPolicies()[$this->policy];
+        $handler = $policy->getHandler();
+
+        /** @var AuthorizationHandlerInterface $build */
+        $build = new $handler();
+
+        return $build->handleRequirement($user, $policy);
     }
 }

@@ -6,5 +6,13 @@ use Authentication\Authenticator\ResultInterface;
 
 interface IdentityInterface extends \ArrayAccess
 {
-    public function getOriginalData();
+    /**
+     * @return int|string|null
+     */
+    public function getIdentifier(): int|string|null;
+
+    /**
+     * @return array|\ArrayAccess<IdentityInterface>
+     */
+    public function getOriginalData(): array|\ArrayAccess;
 }

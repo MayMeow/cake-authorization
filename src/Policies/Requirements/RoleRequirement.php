@@ -6,13 +6,21 @@ class RoleRequirement implements PolicyRequirementInterface
 {
     protected string $role;
 
-    public function __construct(string $role)
+    protected string $handler;
+
+    public function __construct(string $role, string $handler)
     {
         $this->role = $role;
+        $this->handler = $handler;
     }
 
     public function getRequirement(): string|int
     {
         return $this->role;
+    }
+
+    public function getHandler(): string
+    {
+        return $this->handler;
     }
 }

@@ -21,7 +21,7 @@ class IdentityDecorator implements IdentityInterface
 
     /**
      * @param AuthorizationServiceInterface $service
-     * @param \Authentication\Identity|ArrayAccess $identity
+     * @param \Authentication\Identity|ArrayAccess<IdentityInterface> $identity
      * @throws \Exception
      */
     public function __construct(AuthorizationServiceInterface $service, $identity)
@@ -69,7 +69,7 @@ class IdentityDecorator implements IdentityInterface
      * @return mixed
      */
     #[\ReturnTypeWillChange]
-    public function offsetSet(mixed $offset, mixed $value)
+    public function offsetSet(mixed $offset, mixed $value): mixed
     {
         return $this->identity[$offset] = $value;
     }
@@ -84,9 +84,9 @@ class IdentityDecorator implements IdentityInterface
     }
 
     /**
-     * @return array|ArrayAccess
+     * @return array|ArrayAccess<\Authentication\Identity>
      */
-    public function getOriginalData()
+    public function getOriginalData(): array|\ArrayAccess
     {
         if (
             $this->identity
@@ -105,7 +105,7 @@ class IdentityDecorator implements IdentityInterface
      * @param array $args
      * @return mixed
      */
-    public function __call(string $method, array $args)
+    public function __call(string $method, array $args): mixed
     {
         if (!is_object($this->identity)) {
             throw new \Exception("Cannot call `{$method}`. Identity data is not an object.");
@@ -119,7 +119,7 @@ class IdentityDecorator implements IdentityInterface
      * @param string $property
      * @return mixed
      */
-    public function __get(string $property)
+    public function __get(string $property): mixed
     {
         return $this->identity->{$property};
     }
@@ -128,8 +128,17 @@ class IdentityDecorator implements IdentityInterface
      * @param string $property
      * @return bool
      */
-    public function __isset(string $property)
+    public function __isset(string $property): bool
     {
         return isset($this->identity->{$property});
+    }
+
+    /**
+     * @return int|string|null
+     * @throws \Exception
+     */
+    public function getIdentifier(): int|string|null
+    {
+        throw new \Exception('Method `getIdentifier` is not implemented.');
     }
 }
