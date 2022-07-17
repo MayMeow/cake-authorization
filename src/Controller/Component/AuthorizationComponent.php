@@ -30,7 +30,7 @@ class AuthorizationComponent extends Component
      * @param Controller $controller
      * @throws \ReflectionException
      */
-    public function authorize(Controller $controller)
+    public function authorize(Controller $controller): void
     {
         $method = $controller->getRequest()->getParam('action');
         $identity = $controller->getRequest()->getAttribute('identity');
@@ -50,7 +50,7 @@ class AuthorizationComponent extends Component
             /** @var AuthorizationInterface $authenticatedUser */
             $authenticatedUser = $this->_getAuthenticatedUser($identity);
 
-            if ($authorization->isAuthorized($authenticatedUser) == false) {
+            if (!$authorization->isAuthorized($authenticatedUser)) {
                 throw new UnauthorizedException("You are not allowed to preform $method action");
             }
         }
