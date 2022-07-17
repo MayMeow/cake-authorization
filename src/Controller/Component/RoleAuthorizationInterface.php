@@ -5,7 +5,7 @@ namespace MayMeow\Authorization\Controller\Component;
 
 /**
  * @deprecated
- * @see AuthorizationInterface
+ * @see        AuthorizationInterface
  */
 interface RoleAuthorizationInterface
 {

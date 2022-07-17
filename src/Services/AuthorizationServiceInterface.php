@@ -8,7 +8,7 @@ use MayMeow\Authorization\Controller\Component\AuthorizationInterface;
 interface AuthorizationServiceInterface
 {
     /**
-     * @param \MayMeow\Authorization\Controller\Component\AuthorizationInterface $user
+     * @param  \MayMeow\Authorization\Controller\Component\AuthorizationInterface $user
      * @return bool
      */
     public function handle(AuthorizationInterface $user): bool;

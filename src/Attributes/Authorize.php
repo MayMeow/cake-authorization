@@ -23,7 +23,7 @@ class Authorize
     /**
      * @param string|null $role
      * @param string|null $policy
-     * @param null $options
+     * @param null        $options
      * @param string|null $options
      */
     public function __construct(
@@ -47,7 +47,7 @@ class Authorize
     /**
      * Check if role is in allowed roles
      *
-     * @param string $name
+     * @param  string $name
      * @return bool Returns true if group is in array or match exact group name, False is default
      */
     public function hasRole(string $name): bool
@@ -92,7 +92,7 @@ class Authorize
     }
 
     /**
-     * @param \MayMeow\Authorization\Controller\Component\AuthorizationInterface $user
+     * @param  \MayMeow\Authorization\Controller\Component\AuthorizationInterface $user
      * @return bool
      */
     public function isAuthorized(AuthorizationInterface $user): bool

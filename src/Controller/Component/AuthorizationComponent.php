@@ -26,7 +26,7 @@ class AuthorizationComponent extends Component
     ];
 
     /**
-     * @param \Cake\Controller\Controller $controller
+     * @param  \Cake\Controller\Controller $controller
      * @throws \ReflectionException
      */
     public function authorize(Controller $controller): void
@@ -38,7 +38,9 @@ class AuthorizationComponent extends Component
         $attributes = $reflectionClass->getMethod($method)->getAttributes(Authorize::class);
 
         if (!empty($attributes)) {
-            /** @var \MayMeow\Authorization\Attributes\Authorize $authorization */
+            /**
+ * @var \MayMeow\Authorization\Attributes\Authorize $authorization 
+*/
             $authorization = $attributes[0]->newInstance();
             $authorizationService = new AuthorizationService($authorization);
 
@@ -47,7 +49,9 @@ class AuthorizationComponent extends Component
                 throw new UnauthorizedException('Please login');
             }
 
-            /** @var \MayMeow\Authorization\Controller\Component\AuthorizationInterface $authenticatedUser */
+            /**
+ * @var \MayMeow\Authorization\Controller\Component\AuthorizationInterface $authenticatedUser 
+*/
             $authenticatedUser = $this->_getAuthenticatedUser($identity);
 
             if (!$authorizationService->handle($authenticatedUser)) {
@@ -57,12 +61,14 @@ class AuthorizationComponent extends Component
     }
 
     /**
-     * @param \MayMeow\Authorization\Controller\Component\AuthorizationInterface $identity User identity
+     * @param  \MayMeow\Authorization\Controller\Component\AuthorizationInterface $identity User identity
      * @return \Cake\Datasource\EntityInterface Entity Interface
      */
     protected function _getAuthenticatedUser(AuthorizationInterface $identity): EntityInterface
     {
-        /** @var \Authentication\Identity $user */
+        /**
+ * @var \Authentication\Identity $user 
+*/
         $user = $identity;
         $usersTable = TableRegistry::getTableLocator()->get($this->getConfig('identity_model'));
 
