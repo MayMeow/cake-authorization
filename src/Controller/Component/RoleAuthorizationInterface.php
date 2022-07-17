@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace MayMeow\Authorization\Controller\Component;
 
 /**
  * @deprecated
- * @see AuthorizationInterface
+ * @see        AuthorizationInterface
  */
 interface RoleAuthorizationInterface
 {
@@ -13,5 +14,5 @@ interface RoleAuthorizationInterface
      *
      * @return string
      */
-    public function getRoleName() : string;
+    public function getRoleName(): string;
 }

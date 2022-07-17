@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace MayMeow\Authorization\Controller\Component;
 
@@ -7,7 +8,8 @@ interface ResourceAuthorizationInterface
     /**
      * It is used to return author id for given resource
      * Mostly user_id
+     *
      * @return int
      */
-    public function getAuthorIdentifier() : int;
+    public function getAuthorIdentifier(): int;
 }
