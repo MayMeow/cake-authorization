@@ -18,10 +18,10 @@ The recommended way to install composer packages is:
 composer require maymeow/cake-authorization
 ```
 
-load plugin to the CakePHP app
+load plugin to the CakePHP `Application.php`
 
 ```bash
-php bin/cake.php plugin load Authorization
+$this->addPlugin('MayMeow/Authorization');
 ```
 
 load it in controller
