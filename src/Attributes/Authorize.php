@@ -3,6 +3,9 @@
 namespace MayMeow\Authorization\Attributes;
 
 use MayMeow\Authorization\Controller\Component\AuthorizationInterface;
+use MayMeow\Authorization\Identity;
+use MayMeow\Authorization\IdentityInterface;
+use MayMeow\Authorization\Policies\Requirements\Handlers\AuthorizationHandlerInterface;
 use function PHPUnit\Framework\isNan;
 use function PHPUnit\Framework\isNull;
 
@@ -14,20 +17,23 @@ class Authorize
      */
     protected ?string $role;
 
-    protected ?string $user;
+    /**
+     * @var string|null
+     */
+    protected ?string $policy;
 
     /**
      * @param string|null $role
-     * @param string|null $user
+     * @param string|null $policy
      */
-    public function __construct(?string $role = null, ?string $user = null)
+    public function __construct(?string $role = null, ?string $policy = null)
     {
         if ($role != null) {
             $this->role = $role;
         }
 
-        if ($user != null) {
-            $this->user = $user;
+        if ($policy != null) {
+            $this->policy = $policy;
         }
     }
 
@@ -47,12 +53,12 @@ class Authorize
 
     /**
      * Returns true if user is set
-     *
+     * @TODO: finish this method
      * @return bool
      */
-    public function isUserBased(): bool
+    public function isPolicyBased(): bool
     {
-        if (!$this->isRoleBased() && isset($this->user)) {
+        if (isset($this->policy)) {
             return true;
         }
 
@@ -89,23 +95,12 @@ class Authorize
     }
 
     /**
-     * Check if name is in allowed usernames
-     * @param string $bane
+     * @param AuthorizationInterface $user
      * @return bool
      */
-    public function hasUser(string $name): bool
+    public function isAuthorized(AuthorizationInterface $user): bool
     {
-        if (!isset($this->user)) {
-            return false;
-        }
-
-        if (strpos($this->user, ',')) {
-            $users = explode(',', $this->user);
-
-            if (in_array($name, $users)) {
-                return true;
-            }
-        } else if ($this->user == $name) {
+        if ($this->hasRole($user->getRoleName())) {
             return true;
         }
 
@@ -113,15 +108,17 @@ class Authorize
     }
 
     /**
-     * @param AuthorizationInterface $user
+     * @param IdentityInterface|Identity $identity
      * @return bool
      */
-    public function isAuthorized(AuthorizationInterface $user): bool
+    public function can(IdentityInterface|Identity $identity, AuthorizationInterface $user): bool
     {
-        if ($this->hasRole($user->getRoleName()) || $this->hasUser($user->getUserName())) {
-            return true;
-        }
+        $policy = $identity->getAuthorization()->getPolicies()[$this->policy];
+        $handler = $policy->getHandler();
 
-        return false;
+        /** @var AuthorizationHandlerInterface $build */
+        $build = new $handler();
+
+        return $build->handleRequirement($user, $policy);
     }
 }
