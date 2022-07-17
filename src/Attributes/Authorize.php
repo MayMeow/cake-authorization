@@ -28,34 +28,6 @@ class Authorize
     }
 
     /**
-     * Returns true if groups is set & there is no user
-     *
-     * @return bool
-     */
-    public function isRoleBased() :bool
-    {
-        if (isset($this->group) && !isset($this->user)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true if user is set
-     *
-     * @return bool
-     */
-    public function isUserBased(): bool
-    {
-        if (!$this->isRoleBased() && isset($this->user)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Check if role is in allowed roles
      *
      * @param string $name
