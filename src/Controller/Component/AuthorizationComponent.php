@@ -39,7 +39,7 @@ class AuthorizationComponent extends Component
 
         if (!empty($attributes)) {
             /**
- * @var \MayMeow\Authorization\Attributes\Authorize $authorization 
+ * @var \MayMeow\Authorization\Attributes\Authorize $authorization
 */
             $authorization = $attributes[0]->newInstance();
             $authorizationService = new AuthorizationService($authorization);
@@ -50,7 +50,7 @@ class AuthorizationComponent extends Component
             }
 
             /**
- * @var \MayMeow\Authorization\Controller\Component\AuthorizationInterface $authenticatedUser 
+ * @var \MayMeow\Authorization\Controller\Component\AuthorizationInterface $authenticatedUser
 */
             $authenticatedUser = $this->_getAuthenticatedUser($identity);
 
@@ -67,7 +67,7 @@ class AuthorizationComponent extends Component
     protected function _getAuthenticatedUser(AuthorizationInterface $identity): EntityInterface
     {
         /**
- * @var \Authentication\Identity $user 
+ * @var \Authentication\Identity $user
 */
         $user = $identity;
         $usersTable = TableRegistry::getTableLocator()->get($this->getConfig('identity_model'));

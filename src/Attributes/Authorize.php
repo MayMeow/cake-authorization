@@ -22,8 +22,7 @@ class Authorize
 
     /**
      * @param string|null $role
-     * @param string|null $policy
-     * @param null        $options
+     * @param \MayMeow\Authorization\Policies\Policy|null $policy
      * @param string|null $options
      */
     public function __construct(
