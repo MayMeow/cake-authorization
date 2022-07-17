@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace MayMeow\Authorization\Controller\Component;
 
-use Authentication\Identity;
 use Cake\Controller\Component;
-use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Datasource\EntityInterface;
 use Cake\Http\Exception\UnauthorizedException;
@@ -24,11 +22,11 @@ class AuthorizationComponent extends Component
      * @var array
      */
     protected $_defaultConfig = [
-        'identity_model' => 'Users'
+        'identity_model' => 'Users',
     ];
 
     /**
-     * @param Controller $controller
+     * @param \Cake\Controller\Controller $controller
      * @throws \ReflectionException
      */
     public function authorize(Controller $controller): void
@@ -40,7 +38,7 @@ class AuthorizationComponent extends Component
         $attributes = $reflectionClass->getMethod($method)->getAttributes(Authorize::class);
 
         if (!empty($attributes)) {
-            /** @var Authorize $authorization */
+            /** @var \MayMeow\Authorization\Attributes\Authorize $authorization */
             $authorization = $attributes[0]->newInstance();
             $authorizationService = new AuthorizationService($authorization);
 
@@ -49,7 +47,7 @@ class AuthorizationComponent extends Component
                 throw new UnauthorizedException('Please login');
             }
 
-            /** @var AuthorizationInterface $authenticatedUser */
+            /** @var \MayMeow\Authorization\Controller\Component\AuthorizationInterface $authenticatedUser */
             $authenticatedUser = $this->_getAuthenticatedUser($identity);
 
             if (!$authorizationService->handle($authenticatedUser)) {
@@ -58,10 +56,16 @@ class AuthorizationComponent extends Component
         }
     }
 
-    protected function _getAuthenticatedUser(Identity $identity) : EntityInterface
+    /**
+     * @param \MayMeow\Authorization\Controller\Component\AuthorizationInterface $identity User identity
+     * @return \Cake\Datasource\EntityInterface Entity Interface
+     */
+    protected function _getAuthenticatedUser(AuthorizationInterface $identity): EntityInterface
     {
+        /** @var \Authentication\Identity $user */
+        $user = $identity;
         $usersTable = TableRegistry::getTableLocator()->get($this->getConfig('identity_model'));
 
-        return $usersTable->get($identity->getIdentifier());
+        return $usersTable->get($user->getIdentifier());
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace MayMeow\Authorization\Services;
 
@@ -15,7 +16,7 @@ class AuthorizationService implements AuthorizationServiceInterface
     }
 
     /**
-     * @param AuthorizationInterface $user
+     * @param \MayMeow\Authorization\Controller\Component\AuthorizationInterface $user
      * @return bool
      */
     public function handle(AuthorizationInterface $user): bool
