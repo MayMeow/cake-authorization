@@ -3,7 +3,7 @@
 namespace MayMeow\Authorization\Attributes;
 
 use MayMeow\Authorization\Controller\Component\AuthorizationInterface;
-use MayMeow\Authorization\Policies\AuthorizationPolicy;
+use MayMeow\Authorization\Policies\Policy;
 use function PHPUnit\Framework\isNan;
 use function PHPUnit\Framework\isNull;
 
@@ -17,19 +17,19 @@ class Authorize
 
     protected ?string $user;
 
-    protected ?AuthorizationPolicy $policy;
+    protected ?Policy $policy;
 
     protected ?string $options;
 
     /**
      * @param string|null $role
      * @param string|null $policy
-     * @param AuthorizationPolicy|null $policy
+     * @param Policy|null $policy
      * @param string|null $options
      */
     public function __construct(
         ?string $role = null,
-        ?AuthorizationPolicy $policy = null,
+        ?Policy $policy = null,
         ?string $options = null)
     {
         if ($role != null) {
@@ -74,14 +74,47 @@ class Authorize
         return false;
     }
 
+    public function isRoleBased(): bool
+    {
+        if (isset($this->role)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isPolicyBased(): bool
+    {
+        if (isset($this->policy)) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @param AuthorizationInterface $user
      * @return bool
      */
     public function isAuthorized(AuthorizationInterface $user): bool
     {
-        if ($this->hasRole($user->getRoleName())) {
-            return true;
+        if ($this->isRoleBased()) {
+            if ($this->hasRole($user->getRoleName())) {
+                return true;
+            }
+        }
+
+        if ($this->isPolicyBased() && $this->options != null) {
+            if ($this->policy == Policy::requireUserName) {
+                if ($user->getUserName() == $this->options) {
+                    return true;
+                }
+            } else if ($this->policy == Policy::requireRole && $this->options != null) {
+                $this->role = $this->options;
+                if ($this->hasRole($user->getRoleName())) {
+                    return true;
+                }
+            }
         }
 
         return false;

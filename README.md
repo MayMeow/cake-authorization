@@ -97,6 +97,38 @@ public function view($id = null)
 
 If you're using role based authorization, all roles for which you want to have access to the actions must be provided.
 
+## Policy based authorization
+
+Using some predefined policies to authorize users like username or required role.
+
+You can check for role by role based but also with policy based authoriaztion as follows
+
+```php
+#[Authorize(policy: Policy::requireRole, options: 'administrator')]
+public function view($id = null)
+{
+    $user = $this->Users->get($id, [
+        'contain' => [],
+    ]);
+
+    $this->set(compact('user'));
+}
+```
+
+If you want to authorize user by username you can use RequiresUsername policy.
+
+```php
+#[Authorize(policy: Policy::requireUserName, options: 'email@address.tld')]
+public function view($id = null)
+{
+    $user = $this->Users->get($id, [
+        'contain' => [],
+    ]);
+
+    $this->set(compact('user'));
+}
+```
+
 ## Contribute
 
 For contibuting guide please check https://github.com/MayMeow/contribution
